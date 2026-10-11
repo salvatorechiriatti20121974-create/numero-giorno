@@ -1,0 +1,38 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#2563eb">
+<link rel="manifest" href="manifest.json">
+<title>Numero del Giorno</title>
+<style>
+*{box-sizing:border-box}body{margin:0;min-height:100vh;display:flex;justify-content:center;align-items:center;
+font-family:Arial,sans-serif;background:linear-gradient(135deg,#eef5ff,#dbeafe);color:#172033}
+.card{width:min(92%,520px);background:#fff;padding:34px;border-radius:22px;box-shadow:0 12px 35px #0002;text-align:center}
+h1{margin:0 0 8px;font-size:32px}.subtitle{color:#64748b;margin-bottom:28px}
+button{border:0;border-radius:12px;padding:14px 18px;font-size:17px;font-weight:bold;cursor:pointer;background:#2563eb;color:#fff}
+#todayBtn{width:100%;margin-bottom:20px}.date-box{display:flex;gap:10px}
+input{flex:1;padding:13px;border:1px solid #cbd5e1;border-radius:10px;font-size:16px}
+.result{min-height:115px;margin-top:22px;padding:20px;border-radius:15px;background:#f1f5f9;display:flex;flex-direction:column;justify-content:center}
+.result-label{color:#64748b;font-size:15px}.day-number{font-size:54px;font-weight:800;color:#2563eb}
+.selected-date{margin-top:4px;font-size:15px;color:#475569}
+</style></head>
+<body><main class="card">
+<h1>Numero del Giorno</h1>
+<div class="subtitle">Scopri il numero progressivo del giorno nell'anno</div>
+<button id="todayBtn">Data di oggi</button>
+<div class="date-box"><input type="date" id="dateInput"><button id="calculateBtn">Calcola</button></div>
+<section class="result"><div class="result-label">Numero del giorno</div><div class="day-number" id="dayNumber">—</div>
+<div class="selected-date" id="selectedDate">Seleziona una data</div></section>
+</main>
+<script>
+const input=document.getElementById('dateInput'),num=document.getElementById('dayNumber'),sel=document.getElementById('selectedDate');
+function calc(s){if(!s){num.textContent='—';sel.textContent='Seleziona una data';return}
+let [y,m,d]=s.split('-').map(Number),date=Date.UTC(y,m-1,d),start=Date.UTC(y,0,1);
+num.textContent=Math.floor((date-start)/86400000)+1;sel.textContent=`${String(d).padStart(2,'0')}/${String(m).padStart(2,'0')}/${y}`}
+document.getElementById('todayBtn').onclick=()=>{let x=new Date(),s=`${x.getFullYear()}-${String(x.getMonth()+1).padStart(2,'0')}-${String(x.getDate()).padStart(2,'0')}`;input.value=s;calc(s)};
+document.getElementById('calculateBtn').onclick=()=>calc(input.value);
+input.onkeydown=e=>{if(e.key==='Enter')calc(input.value)};
+if('serviceWorker'in navigator)window.addEventListener('load',()=>navigator.serviceWorker.register('sw.js'));
+</script></body></html>
